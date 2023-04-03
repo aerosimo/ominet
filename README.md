@@ -1,2 +1,3 @@
 # ominet
-Knowledge is that area of ignorance that we arrange and classify.
+
+Card Validator endpoint: http://ominet.aerosimo.com:8082/validatecard/ws/cardvalidator/v1?wsdl

@@ -114,7 +114,7 @@
     <jdbc.version>21.8.0.0</jdbc.version>
     <junit.version>5.9.2</junit.version>
     <lang.version>3.12.0</lang.version>
-    <mail.version>2.0.1</mail.version>
+    <mail.version>2.1.1</mail.version>
     <xml.version>4.0.0</xml.version>
     <com.version>1.7</com.version>
   </properties>
@@ -145,8 +145,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.sun.mail</groupId>
-      <artifactId>jakarta.mail</artifactId>
+      <groupId>jakarta.mail</groupId>
+      <artifactId>jakarta.mail-api</artifactId>
       <version>${mail.version}</version>
       <scope>provided</scope>
     </dependency>

@@ -2,9 +2,9 @@
  * This piece of work is to enhance geocoding project functionality.          *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      Address.java                                                    *
- * Created:   26/04/2023, 19:03                                               *
- * Modified:  26/04/2023, 19:03                                               *
+ * File:      EncoderDecoder.java                                             *
+ * Created:   28/04/2023, 20:44                                               *
+ * Modified:  28/04/2023, 20:44                                               *
  *                                                                            *
  * Copyright (c)  2023.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,51 +29,16 @@
  *                                                                            *
  ******************************************************************************/
 
-package com.aerosimo.ominet.api;
+package com.aerosimo.ominet.app;
 
-import com.aerosimo.ominet.core.Connect;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.Types;
+public class EncoderDecoder {
 
-public class Address {
-
-    private static final Logger log = LogManager.getLogger(Address.class.getName());
-
-    static String response;
-
-    public static String amendAddress(String userid, String addressType, String result){
-        try{
-            int i = result.indexOf("{");
-            result = result.substring(i);
-            JSONObject maps;
-            maps = new JSONObject(result.trim());
-            String sql;
-            sql = "{call address_pkg.reviseaddress(?,?,?,?,?)}";
-            Connection con;
-            con = Connect.dbase();
-            CallableStatement stmt;
-            stmt = con.prepareCall(sql);
-            log.info("user ID : " + userid);
-            stmt.setString(1, userid);
-            log.info("Address Type : " + addressType);
-            stmt.setString(2, addressType);
-            log.info("longitude : " + maps.getString("lon"));
-            stmt.setString(3, maps.getString("lon"));
-            log.info("latitude : " + maps.getString("lat"));
-            stmt.setString(4, maps.getString("lat"));
-            stmt.registerOutParameter(5, Types.VARCHAR);
-            stmt.execute();
-            response = stmt.getString(5);
-            log.info("Response from writing to Oracle Table : " + response);
-        }catch(Exception err){
-            response = "Fail";
-            log.error("Address service failed with adaptor error " + err);
-        }
-        return response;
+    public static String encodeValue(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
+
+
 }

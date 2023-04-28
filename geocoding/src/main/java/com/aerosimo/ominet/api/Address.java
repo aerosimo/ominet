@@ -62,6 +62,8 @@ public class Address {
             stmt.setString(2, addressType);
             stmt.setString(3, maps.getString("lon"));
             stmt.setString(4, maps.getString("lat"));
+            log.info("longitude : " + maps.getString("lon"));
+            log.info("latitude : " + maps.getString("lat"));
             stmt.registerOutParameter(5, Types.VARCHAR);
             stmt.execute();
             log.info("Successfully write address geocode details to database");

@@ -74,12 +74,13 @@
                 ⚠️ <span id="error-message"></span>
             </div>
 
-            <form data-redirect="index.jsp" data-validate>
+            <form id="loginForm" data-redirect="index.jsp" data-validate>
                 <div class="form-group">
                     <label class="form-label" for="email">📧 Email Address</label>
                     <input class="form-input"
                            autofocus
                            id="email"
+                           name="email"
                            placeholder="Enter your email"
                            required
                            title="Must contain the Local Part (username), the @ symbol and domain name"
@@ -91,6 +92,7 @@
                     <label class="form-label" for="password">🔒 Password</label>
                     <input class="form-input"
                            id="password"
+                           name="password"
                            autocomplete="off"
                            minlength="8"
                            placeholder="Enter your password"
@@ -107,7 +109,7 @@
                     <a class="forgot-link" href="forgot.jsp">Forgot Password?</a>
                 </div>
 
-                <button class="btn btn-primary" type="submit">
+                <button id="loginBtn" class="btn btn-primary" type="submit">
                     Sign In
                     <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
                         <line x1="5" x2="19" y1="12" y2="12"/>

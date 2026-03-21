@@ -29,51 +29,76 @@
  *                                                                            *
  ******************************************************************************/
 
-const API_LOGIN_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/login";
-const LOCAL_SESSION_URL = "<%= request.getContextPath() %>/auth/set-session";
+(function() {
+    const API_LOGIN_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/login";
+    const SESSION_BRIDGE_URL = "auth/set-session"; // Your local Tomcat Servlet
 
-document.querySelector('form[data-validate]').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const submitBtn = form.querySelector('button[type="submit"]');
+    const handleLogin = async (event) => {
+        event.preventDefault(); // Stop the redirect immediately!
+        event.stopPropagation();
 
-    // 1. Prepare Request (Using username as requested)
-    const uname = document.getElementById('username').value; // Ensure your input ID is 'username'
-    const pword = document.getElementById('password').value;
+        const form = event.currentTarget;
+        const submitBtn = document.getElementById('loginBtn');
+        const redirectUrl = form.getAttribute('data-redirect');
 
-    try {
-        submitBtn.disabled = true;
+        // Extracting data
+        const emailVal = document.getElementById('email').value;
+        const passwordVal = document.getElementById('password').value;
 
-        // 2. Call External Auth API
-        const response = await fetch(API_LOGIN_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: uname, password: pword })
-        });
+        console.log("Login attempt for:", emailVal);
 
-        const result = await response.json();
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Authenticating...";
 
-        if (result.status === "success") {
-            // 3. INTERNAL STEP: Tell Tomcat to remember this user
-            const sessionSync = await fetch(LOCAL_SESSION_URL, {
+            // 1. Call External API
+            const response = await fetch(API_LOGIN_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    username: uname,
-                    token: result.message // This is your long hash
+                    username: emailVal, // Using email input as 'username' per your API spec
+                    password: passwordVal
                 })
             });
 
-            if (sessionSync.ok) {
-                // 4. Final Redirect
-                window.location.href = form.getAttribute('data-redirect');
+            const result = await response.json();
+            console.log("API Response:", result);
+
+            if (result.status === "success") {
+                // 2. Call Local Servlet to set session
+                console.log("Setting local session...");
+                const sessionResponse = await fetch(SESSION_BRIDGE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: emailVal,
+                        token: result.message
+                    })
+                });
+
+                if (sessionResponse.ok) {
+                    console.log("Success! Redirecting...");
+                    window.location.href = redirectUrl;
+                } else {
+                    throw new Error("Local session failed to start.");
+                }
+            } else {
+                alert("Login Failed: " + result.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Sign In";
             }
-        } else {
-            alert("Login Failed: " + result.message);
+        } catch (error) {
+            console.error("Login Error:", error);
+            alert("Could not complete login. Check console for details.");
             submitBtn.disabled = false;
+            submitBtn.innerText = "Sign In";
         }
-    } catch (err) {
-        console.error(err);
-        submitBtn.disabled = false;
+    };
+
+    // Attach listener
+    const formElement = document.getElementById('loginForm');
+    if (formElement) {
+        formElement.onsubmit = handleLogin;
+        console.log("Login listener attached.");
     }
-});
+})();

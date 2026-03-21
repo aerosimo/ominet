@@ -33,8 +33,8 @@ async function handleLogin(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    const form = event.currentTarget;
     const submitBtn = document.getElementById('loginBtn');
+    const form = event.currentTarget;
     const redirectUrl = form.getAttribute('data-redirect');
 
     const unameVal = document.getElementById('username').value;
@@ -44,8 +44,9 @@ async function handleLogin(event) {
         submitBtn.disabled = true;
         submitBtn.innerText = "Authenticating...";
 
-        // 1. Call your Auth API (Port 9443)
-        const response = await fetch("/authcore/api/auth/login", {
+        // --- STEP 1: External API (Port 9443) ---
+        // This is what triggers your email notification
+        const response = await fetch(OMINET_CONFIG.apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: unameVal, password: pwordVal })
@@ -54,11 +55,11 @@ async function handleLogin(event) {
         const result = await response.json();
 
         if (result.status === "success") {
-            submitBtn.innerText = "Syncing Session...";
+            submitBtn.innerText = "Saving Session...";
 
-            // 2. Call the Local Session Bridge Servlet
-            // This URL matches the @WebServlet annotation
-            const sessionSync = await fetch("<%= request.getContextPath() %>/auth/set-session", {
+            // --- STEP 2: Local Session Sync ---
+            // This is where the 400 error was happening
+            const sessionSync = await fetch(OMINET_CONFIG.sessionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -68,12 +69,13 @@ async function handleLogin(event) {
             });
 
             if (sessionSync.ok) {
+                // Success! Redirect to index.jsp
                 window.location.href = redirectUrl;
             } else {
-                // If it fails here, the Servlet crashed.
-                // Check the "Response" tab in Chrome Inspect for the Java error.
-                const errorData = await sessionSync.json();
-                alert("Session Error: " + errorData.message);
+                // This means the Servlet crashed or wasn't found
+                const errText = await sessionSync.text();
+                console.error("Session Sync Failed:", errText);
+                alert("Login successful (Email sent), but could not start local session.");
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Sign In";
             }
@@ -83,8 +85,8 @@ async function handleLogin(event) {
             submitBtn.innerText = "Sign In";
         }
     } catch (err) {
-        console.error("Fetch Error:", err);
-        alert("Server communication error.");
+        console.error("Network Error:", err);
+        alert("Communication Error: Is the server running?");
         submitBtn.disabled = false;
         submitBtn.innerText = "Sign In";
     }

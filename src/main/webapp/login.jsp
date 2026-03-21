@@ -51,8 +51,20 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
           rel="stylesheet">
+
+    <script>
+        // Dynamically set the context path via JSP
+        const OMINET_CONFIG = {
+            contextPath: '<%= request.getContextPath() %>',
+            sessionUrl: '<%= request.getContextPath() %>/auth/set-session',
+            apiUrl: '/authcore/api/auth/login'
+        };
+    </script>
 </head>
 <body>
+
+<input type="hidden" id="contextPath" value="<%= request.getContextPath() %>">
+
 <!-- Animated Background -->
 <div class="background"></div>
 <div class="orb orb-1"></div>

@@ -74,7 +74,7 @@
                 ⚠️ <span id="error-message"></span>
             </div>
 
-            <form id="loginForm" data-redirect="index.jsp" data-validate>
+            <form id="loginForm" data-redirect="index.jsp" onsubmit="return handleLogin(event)" data-validate>
                 <div class="form-group">
                     <label class="form-label" for="username">👤 Username</label>
                     <input class="form-input"

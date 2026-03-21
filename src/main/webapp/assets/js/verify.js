@@ -2,9 +2,9 @@
  * This piece of work is to enhance ominet project functionality.             *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      register.js                                                     *
- * Created:   21/03/2026, 01:47                                               *
- * Modified:  21/03/2026, 01:47                                               *
+ * File:      verify.js                                                       *
+ * Created:   21/03/2026, 03:02                                               *
+ * Modified:  21/03/2026, 03:02                                               *
  *                                                                            *
  * Copyright (c)  2026.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,54 +29,61 @@
  *                                                                            *
  ******************************************************************************/
 
+document.addEventListener('DOMContentLoaded', () => {
+    const verifyForm = document.getElementById('verifyForm');
+    if (!verifyForm) return;
 
-    const API_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/register";
+    const API_VERIFY_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/verify";
 
-    document.querySelector('form[data-validate]').addEventListener('submit', async (e) => {
+    verifyForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const form = e.target;
-        const submitBtn = form.querySelector('button[type="submit"]');
+        const submitBtn = verifyForm.querySelector('button[type="submit"]');
         const errorAlert = document.getElementById('error-alert');
         const errorText = document.getElementById('error-message');
+        const redirectUrl = verifyForm.getAttribute('data-redirect');
 
-        // Clear previous errors
+        // Reset UI
         errorAlert.style.display = 'none';
+        submitBtn.disabled = true;
+        const originalContent = submitBtn.innerHTML;
+        submitBtn.innerText = "Verifying...";
 
+        // Payload: Maps HTML 'verify' value to API 'token' key
         const payload = {
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value
+            token: document.getElementById('verify').value.trim()
         };
 
         try {
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Processing...";
-
-            const response = await fetch(API_URL, {
+            const response = await fetch(API_VERIFY_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify(payload)
             });
 
             const result = await response.json();
 
-            if (result.status === "success") {
-                // SUCCESS: Clean redirect to login
-                window.location.href = form.getAttribute('data-redirect');
+            if (response.ok && result.status === "success") {
+                // SUCCESS: Proceed to login
+                console.log("Verification success:", result.message);
+                window.location.href = redirectUrl;
             } else {
-                // ERROR: Show the message from the API (e.g., "Email already taken")
-                errorText.innerText = result.message || "An unexpected error occurred.";
+                // ERROR: Show the "Invalid code" or "Expired" message from your API
+                errorText.innerText = result.message || "Verification failed. Please try again.";
                 errorAlert.style.display = 'block';
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Create Account";
+                submitBtn.innerHTML = originalContent;
             }
 
         } catch (error) {
-            console.error("API Connection Error:", error);
-            errorText.innerText = "Server is unreachable. Check your Homelab connection.";
+            console.error("Connection Error:", error);
+            errorText.innerText = "Cannot connect to Ominet Auth service.";
             errorAlert.style.display = 'block';
             submitBtn.disabled = false;
-            submitBtn.innerText = "Create Account";
+            submitBtn.innerHTML = originalContent;
         }
     });
+});

@@ -2,9 +2,9 @@
   ~ This piece of work is to enhance ominet project functionality.            ~
   ~                                                                           ~
   ~ Author:    eomisore                                                       ~
-  ~ File:      register.jsp                                                   ~
-  ~ Created:   21/03/2026, 01:49                                              ~
-  ~ Modified:  21/03/2026, 01:49                                              ~
+  ~ File:      verify.html                                                    ~
+  ~ Created:   21/03/2026, 02:39                                              ~
+  ~ Modified:  21/03/2026, 02:39                                              ~
   ~                                                                           ~
   ~ Copyright (c)  2026.  Aerosimo Ltd                                        ~
   ~                                                                           ~
@@ -29,14 +29,13 @@
   ~                                                                           ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <!-- Title -->
-    <title>Register | Aerosimo Ltd</title>
+    <title>Verify | Aerosimo Ltd</title>
     <!-- Favicon -->
     <link href="assets/img/favicon/favicon.ico" rel="shortcut icon"/>
     <link href="assets/img/favicon/favicon.ico" rel="icon" type="image/x-icon">
@@ -66,71 +65,36 @@
                 <div class="sidebar-logo">
                     <img alt="Ominet Logo" class="logo-img" src="assets/img/logo/logo.png">
                 </div>
-                <h1 class="auth-title">Create Account</h1>
-                <p class="auth-subtitle">Create your account and start managing your app. 🚀</p>
+                <h1 class="auth-title">Verify Code</h1>
+                <p class="auth-subtitle">Please enter the 10-character code sent to your email address.</p>
             </div>
 
-            <div id="error-alert" class="auth-subtitle" style="display:none; color: #ff4d4d; background: rgba(255,77,77,0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ff4d4d;">
+            <div id="error-alert" class="auth-subtitle" style="display:none; color: #ff4d4d; background: rgba(255,77,77,0.1); padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ff4d4d; font-size: 14px; text-align: center;">
                 ⚠️ <span id="error-message"></span>
             </div>
 
-            <form data-redirect="verify.jsp" data-validate>
+            <form data-redirect="login.jsp" data-validate>
+
                 <div class="form-group">
-                    <label class="form-label" for="username">👤 Username</label>
-                    <input class="form-input"
+                    <label class="form-label" for="verify">🔢 Verification Code</label>
+                    <input class="form-input otp-field"
                            autofocus
-                           id="username"
-                           placeholder="Enter your username"
+                           id="verify"
+                           placeholder="_ _ _ _ _ _ _ _ _ _"
+                           maxlength="10"
                            required
-                           title="Alternatively referred to as an account name, login ID, nickname, and user ID"
-                           pattern="^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$"
-                           type="text">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="email">📧 Email Address</label>
-                    <input class="form-input"
-                           autofocus
-                           id="email"
-                           placeholder="Enter your email"
-                           required
-                           title="Must contain the Local Part (username), the @ symbol and domain name"
-                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                           type="email">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="password">🔒 Password</label>
-                    <input class="form-input"
-                           id="password"
-                           autocomplete="off"
-                           minlength="8"
-                           placeholder="Enter your password"
-                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                           required
-                           type="password">
-                </div>
-
-                <div class="form-row">
-                    <a class="forgot-link" href="login.jsp">Already have an account? <strong>Sign in</strong></a>
+                           title="10 alphanumeric characters"
+                           pattern="[A-Za-z0-9]{10}">
                 </div>
 
                 <button class="btn btn-primary" type="submit">
-                    Create Account
+                    Verify
                     <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
                         <line x1="5" x2="19" y1="12" y2="12"/>
                         <polyline points="12 5 19 12 12 19"/>
                     </svg>
                 </button>
             </form>
-
-            <div class="divider">
-                <span>Forgot your password?</span>
-            </div>
-
-            <p class="auth-footer">
-                <a href="forgot.jsp">Forgot Password</a>
-            </p>
         </div>
     </div>
 
@@ -144,6 +108,6 @@
 </div>
 
 <script src="assets/js/script.js"></script>
-<script src="assets/js/register.js"></script>
+<script src="assets/js/verify.js"></script>
 </body>
 </html>

@@ -2,9 +2,9 @@
  * This piece of work is to enhance ominet project functionality.             *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      register.js                                                     *
- * Created:   21/03/2026, 01:47                                               *
- * Modified:  21/03/2026, 01:47                                               *
+ * File:      login.js                                                        *
+ * Created:   21/03/2026, 02:47                                               *
+ * Modified:  21/03/2026, 02:47                                               *
  *                                                                            *
  * Copyright (c)  2026.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,54 +29,51 @@
  *                                                                            *
  ******************************************************************************/
 
+const API_LOGIN_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/login";
+const LOCAL_SESSION_URL = "<%= request.getContextPath() %>/auth/set-session";
 
-    const API_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/register";
+document.querySelector('form[data-validate]').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
 
-    document.querySelector('form[data-validate]').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // 1. Prepare Request (Using username as requested)
+    const uname = document.getElementById('username').value; // Ensure your input ID is 'username'
+    const pword = document.getElementById('password').value;
 
-        const form = e.target;
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const errorAlert = document.getElementById('error-alert');
-        const errorText = document.getElementById('error-message');
+    try {
+        submitBtn.disabled = true;
 
-        // Clear previous errors
-        errorAlert.style.display = 'none';
+        // 2. Call External Auth API
+        const response = await fetch(API_LOGIN_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: uname, password: pword })
+        });
 
-        const payload = {
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value
-        };
+        const result = await response.json();
 
-        try {
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Processing...";
-
-            const response = await fetch(API_URL, {
+        if (result.status === "success") {
+            // 3. INTERNAL STEP: Tell Tomcat to remember this user
+            const sessionSync = await fetch(LOCAL_SESSION_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    username: uname,
+                    token: result.message // This is your long hash
+                })
             });
 
-            const result = await response.json();
-
-            if (result.status === "success") {
-                // SUCCESS: Clean redirect to login
+            if (sessionSync.ok) {
+                // 4. Final Redirect
                 window.location.href = form.getAttribute('data-redirect');
-            } else {
-                // ERROR: Show the message from the API (e.g., "Email already taken")
-                errorText.innerText = result.message || "An unexpected error occurred.";
-                errorAlert.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Create Account";
             }
-
-        } catch (error) {
-            console.error("API Connection Error:", error);
-            errorText.innerText = "Server is unreachable. Check your Homelab connection.";
-            errorAlert.style.display = 'block';
+        } else {
+            alert("Login Failed: " + result.message);
             submitBtn.disabled = false;
-            submitBtn.innerText = "Create Account";
         }
-    });
+    } catch (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+    }
+});

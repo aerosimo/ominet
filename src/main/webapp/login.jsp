@@ -2,9 +2,9 @@
   ~ This piece of work is to enhance ominet project functionality.            ~
   ~                                                                           ~
   ~ Author:    eomisore                                                       ~
-  ~ File:      register.jsp                                                   ~
-  ~ Created:   21/03/2026, 01:49                                              ~
-  ~ Modified:  21/03/2026, 01:49                                              ~
+  ~ File:      login.jsp                                                      ~
+  ~ Created:   21/03/2026, 02:29                                              ~
+  ~ Modified:  21/03/2026, 02:29                                              ~
   ~                                                                           ~
   ~ Copyright (c)  2026.  Aerosimo Ltd                                        ~
   ~                                                                           ~
@@ -36,7 +36,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <!-- Title -->
-    <title>Register | Aerosimo Ltd</title>
+    <title>Login | Aerosimo Ltd</title>
     <!-- Favicon -->
     <link href="assets/img/favicon/favicon.ico" rel="shortcut icon"/>
     <link href="assets/img/favicon/favicon.ico" rel="icon" type="image/x-icon">
@@ -66,27 +66,15 @@
                 <div class="sidebar-logo">
                     <img alt="Ominet Logo" class="logo-img" src="assets/img/logo/logo.png">
                 </div>
-                <h1 class="auth-title">Create Account</h1>
-                <p class="auth-subtitle">Create your account and start managing your app. 🚀</p>
+                <h1 class="auth-title">Sign In</h1>
+                <p class="auth-subtitle">Sign in and start managing your apps. 👋</p>
             </div>
 
-            <div id="error-alert" class="auth-subtitle" style="display:none; color: #ff4d4d; background: rgba(255,77,77,0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ff4d4d;">
+            <div id="error-alert" class="auth-subtitle" style="display:none; color: #ff4d4d; background: rgba(255,77,77,0.1); padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ff4d4d; font-size: 14px;">
                 ⚠️ <span id="error-message"></span>
             </div>
 
-            <form data-redirect="verify.jsp" data-validate>
-                <div class="form-group">
-                    <label class="form-label" for="username">👤 Username</label>
-                    <input class="form-input"
-                           autofocus
-                           id="username"
-                           placeholder="Enter your username"
-                           required
-                           title="Alternatively referred to as an account name, login ID, nickname, and user ID"
-                           pattern="^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$"
-                           type="text">
-                </div>
-
+            <form data-redirect="index.jsp" data-validate>
                 <div class="form-group">
                     <label class="form-label" for="email">📧 Email Address</label>
                     <input class="form-input"
@@ -112,11 +100,15 @@
                 </div>
 
                 <div class="form-row">
-                    <a class="forgot-link" href="login.jsp">Already have an account? <strong>Sign in</strong></a>
+                    <label class="checkbox-label">
+                        <input checked type="checkbox">
+                        Remember me
+                    </label>
+                    <a class="forgot-link" href="forgot.jsp">Forgot Password?</a>
                 </div>
 
                 <button class="btn btn-primary" type="submit">
-                    Create Account
+                    Sign In
                     <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
                         <line x1="5" x2="19" y1="12" y2="12"/>
                         <polyline points="12 5 19 12 12 19"/>
@@ -125,11 +117,11 @@
             </form>
 
             <div class="divider">
-                <span>Forgot your password?</span>
+                <span>Or don't have an account?</span>
             </div>
 
             <p class="auth-footer">
-                <a href="forgot.jsp">Forgot Password</a>
+                <a href="register.jsp">Create Account</a>
             </p>
         </div>
     </div>
@@ -144,6 +136,6 @@
 </div>
 
 <script src="assets/js/script.js"></script>
-<script src="assets/js/register.js"></script>
+<script src="assets/js/login.js"></script>
 </body>
 </html>

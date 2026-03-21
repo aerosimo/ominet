@@ -77,7 +77,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="verify">🔢 Verification Code</label>
-                    <input class="form-input otp-field"
+                    <input class="form-input"
                            autofocus
                            id="verify"
                            name="verify"

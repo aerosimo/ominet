@@ -76,16 +76,16 @@
 
             <form id="loginForm" data-redirect="index.jsp" data-validate>
                 <div class="form-group">
-                    <label class="form-label" for="email">📧 Email Address</label>
+                    <label class="form-label" for="username">👤 Username</label>
                     <input class="form-input"
-                           autofocus
-                           id="email"
-                           name="email"
-                           placeholder="Enter your email"
-                           required
-                           title="Must contain the Local Part (username), the @ symbol and domain name"
-                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                           type="email">
+                               autofocus
+                               id="username"
+                               name="username"
+                               placeholder="Enter your username"
+                               required
+                               title="Alternatively referred to as an account name, login ID, nickname, and user ID"
+                               pattern="^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$"
+                               type="text">
                 </div>
 
                 <div class="form-group">

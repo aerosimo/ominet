@@ -82,8 +82,10 @@
         <maven.jar.version>3.5.0</maven.jar.version>
         <maven.war.version>3.5.1</maven.war.version>
         <servlet.version>6.1.0</servlet.version>
+        <jersey.version>4.0.2</jersey.version>
         <json.version>20251224</json.version>
         <log4j.version>2.25.3</log4j.version>
+        <jws.version>3.0.0</jws.version>
     </properties>
 
     <dependencies>
@@ -102,6 +104,31 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.jws</groupId>
+            <artifactId>jakarta.jws-api</artifactId>
+            <version>${jws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
     </dependencies>
 

@@ -33,8 +33,6 @@ async function handleLogin(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log("🚀 Login Process Started");
-
     const form = event.currentTarget;
     const submitBtn = document.getElementById('loginBtn');
     const redirectUrl = form.getAttribute('data-redirect');
@@ -44,27 +42,22 @@ async function handleLogin(event) {
 
     try {
         submitBtn.disabled = true;
-        submitBtn.innerText = "Connecting to API...";
+        submitBtn.innerText = "Authenticating...";
 
-        // --- STEP 1: CALL EXTERNAL API ---
-        console.log("📡 Calling External API...");
-        const response = await fetch("https://ominet.aerosimo.com:9443/authcore/api/auth/login", {
+        // 1. Call your Auth API (Port 9443)
+        const response = await fetch("/authcore/api/auth/login", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: unameVal, password: pwordVal })
         });
 
-        console.log("✅ API responded with status:", response.status);
         const result = await response.json();
-        console.log("📦 API Data received:", result);
 
         if (result.status === "success") {
-            submitBtn.innerText = "Creating Session...";
+            submitBtn.innerText = "Syncing Session...";
 
-            // --- STEP 2: CALL LOCAL TOMCAT SERVLET ---
-            console.log("📡 Calling Local Session Bridge...");
-
-            // Use an absolute path from the root to avoid "hanging" on 404s
+            // 2. Call the Local Session Bridge Servlet
+            // This URL matches the @WebServlet annotation
             const sessionSync = await fetch("<%= request.getContextPath() %>/auth/set-session", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -75,27 +68,25 @@ async function handleLogin(event) {
             });
 
             if (sessionSync.ok) {
-                console.log("🎉 Session Sync Success! Redirecting...");
                 window.location.href = redirectUrl;
             } else {
-                console.error("❌ Session Bridge Failed:", sessionSync.status);
-                alert("Internal Server Error: Could not establish session.");
+                // If it fails here, the Servlet crashed.
+                // Check the "Response" tab in Chrome Inspect for the Java error.
+                const errorData = await sessionSync.json();
+                alert("Session Error: " + errorData.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Sign In";
             }
         } else {
-            console.warn("⚠️ API returned failure:", result.message);
             alert("Login Failed: " + result.message);
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Sign In";
         }
-
-    } catch (error) {
-        // This catches Network errors, CORS issues, and DNS failures
-        console.error("🚨 CRITICAL ERROR:", error);
-        alert("Connection Error: " + error.message);
-    } finally {
-        // Always re-enable the button if we didn't redirect
-        console.log("🏁 Process Finished.");
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        alert("Server communication error.");
         submitBtn.disabled = false;
         submitBtn.innerText = "Sign In";
     }
-
     return false;
 }

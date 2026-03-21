@@ -124,7 +124,7 @@
     <main class="main-content">
         <!-- Top Navbar -->
         <nav class="navbar">
-            <h1 class="page-title">Dashboard Overview</h1>
+            <h1 class="page-title"><strong>${sessionScope.user}</strong> Dashboard Overview</h1>
             <div class="navbar-right">
                 <div class="user-menu">
                     <img src="assets/img/user/user.webp" alt="User Avatar" class="avatar">

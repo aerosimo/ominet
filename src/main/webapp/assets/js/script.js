@@ -162,50 +162,6 @@
     }
 
     // ============================================
-    // Form Validation (for login/register)
-    // ============================================
-    function initFormValidation() {
-        const forms = document.querySelectorAll('form[data-validate]');
-
-        forms.forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                let isValid = true;
-                const inputs = form.querySelectorAll('.form-input[required]');
-
-                inputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        isValid = false;
-                        input.style.borderColor = '#ff6b6b';
-                    } else {
-                        input.style.borderColor = '';
-                    }
-                });
-
-                // Email validation
-                const emailInput = form.querySelector('input[type="email"]');
-                if (emailInput && emailInput.value) {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(emailInput.value)) {
-                        isValid = false;
-                        emailInput.style.borderColor = '#ff6b6b';
-                    }
-                }
-
-                if (isValid) {
-                    // Form is valid - you can add your submission logic here
-                    console.log('Form is valid');
-                    // For demo purposes, redirect to dashboard
-                    if (form.dataset.redirect) {
-                        window.location.href = form.dataset.redirect;
-                    }
-                }
-            });
-        });
-    }
-
-    // ============================================
     // Password Visibility Toggle
     // ============================================
     function initPasswordToggle() {

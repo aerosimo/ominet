@@ -57,7 +57,9 @@ public class LoginSessionServlet extends HttpServlet {
             session.setAttribute("session_token", token);
 
             resp.setContentType("application/json");
-            resp.getWriter().write("{\"status\":\"saved\"}");
+            resp.setStatus(200);
+            resp.getWriter().write("{\"status\":\"ok\"}");
+            resp.getWriter().flush();
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }

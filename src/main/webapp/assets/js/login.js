@@ -30,41 +30,41 @@
  ******************************************************************************/
 
 async function handleLogin(event) {
-    // 1. IMMEDIATELY kill the browser's default redirect
     event.preventDefault();
     event.stopPropagation();
 
-    console.log("Login intercept triggered.");
+    console.log("🚀 Login Process Started");
 
     const form = event.currentTarget;
     const submitBtn = document.getElementById('loginBtn');
     const redirectUrl = form.getAttribute('data-redirect');
 
-    // 2. Collect data
     const unameVal = document.getElementById('username').value;
     const pwordVal = document.getElementById('password').value;
 
     try {
         submitBtn.disabled = true;
-        submitBtn.innerText = "Authenticating...";
+        submitBtn.innerText = "Connecting to API...";
 
-        // 3. Call External API
+        // --- STEP 1: CALL EXTERNAL API ---
+        console.log("📡 Calling External API...");
         const response = await fetch("https://ominet.aerosimo.com:9443/authcore/api/auth/login", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: unameVal,
-                password: pwordVal
-            })
+            body: JSON.stringify({ username: unameVal, password: pwordVal })
         });
 
+        console.log("✅ API responded with status:", response.status);
         const result = await response.json();
-        console.log("API Result:", result);
+        console.log("📦 API Data received:", result);
 
-        // 4. CHECK SUCCESS
         if (result.status === "success") {
-            console.log("Success! Syncing Session...");
+            submitBtn.innerText = "Creating Session...";
 
+            // --- STEP 2: CALL LOCAL TOMCAT SERVLET ---
+            console.log("📡 Calling Local Session Bridge...");
+
+            // Use an absolute path from the root to avoid "hanging" on 404s
             const sessionSync = await fetch("<%= request.getContextPath() %>/auth/set-session", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -75,25 +75,27 @@ async function handleLogin(event) {
             });
 
             if (sessionSync.ok) {
+                console.log("🎉 Session Sync Success! Redirecting...");
                 window.location.href = redirectUrl;
-                return false;
+            } else {
+                console.error("❌ Session Bridge Failed:", sessionSync.status);
+                alert("Internal Server Error: Could not establish session.");
             }
         } else {
-            // 5. FAILURE: Show the error and STOP the redirect
-            console.error("Login failed:", result.message);
-            alert("Error: " + (result.message || "Invalid Username/Password"));
-
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Sign In";
-            return false; // Tells the HTML form: DO NOT SUBMIT
+            console.warn("⚠️ API returned failure:", result.message);
+            alert("Login Failed: " + result.message);
         }
+
     } catch (error) {
-        console.error("Network Error:", error);
-        alert("Server unreachable.");
+        // This catches Network errors, CORS issues, and DNS failures
+        console.error("🚨 CRITICAL ERROR:", error);
+        alert("Connection Error: " + error.message);
+    } finally {
+        // Always re-enable the button if we didn't redirect
+        console.log("🏁 Process Finished.");
         submitBtn.disabled = false;
         submitBtn.innerText = "Sign In";
-        return false;
     }
 
-    return false; // Ultimate fallback to prevent redirect
+    return false;
 }

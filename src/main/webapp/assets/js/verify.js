@@ -29,80 +29,64 @@
  *                                                                            *
  ******************************************************************************/
 
-// This wrapper ensures the script waits for the HTML to load
 (function() {
-    console.log("Verify script initialized.");
+    const API_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/verify";
 
-    const initVerify = () => {
-        const form = document.querySelector('form[data-redirect="login.jsp"]');
+    const handleVerification = async (event) => {
+        // STOP THE REDIRECT IMMEDIATELY
+        event.preventDefault();
+        event.stopPropagation();
 
-        if (!form) {
-            console.error("Verification form not found! Check if data-redirect is set.");
+        const form = event.currentTarget;
+        const inputField = document.getElementById('verify');
+        const submitBtn = document.getElementById('verifyBtn');
+        const redirectUrl = form.getAttribute('data-redirect');
+
+        console.log("Form intercepted!");
+
+        if (!inputField) {
+            console.error("CRITICAL: Could not find input with ID 'verify'");
             return;
         }
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log("Form submitted. Intercepting...");
+        const tokenValue = inputField.value.trim();
+        console.log("Token to send:", tokenValue);
 
-            const inputField = document.getElementById('verify');
-            const submitBtn = form.querySelector('button[type="submit"]');
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Checking...";
 
-            // Collect value
-            const codeValue = inputField.value.trim();
-            console.log("Collected Token:", codeValue);
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: tokenValue })
+            });
 
-            if (codeValue.length !== 10) {
-                alert("Please enter all 10 characters.");
-                return;
-            }
+            const result = await response.json();
+            console.log("Server Response:", result);
 
-            const API_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/verify";
-            const redirectUrl = form.getAttribute('data-redirect');
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerText = "Verifying...";
-
-                console.log("Sending request to:", API_URL);
-
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ token: codeValue })
-                });
-
-                console.log("Response status:", response.status);
-
-                const result = await response.json();
-                console.log("API Result:", result);
-
-                if (result.status === "success") {
-                    console.log("Success! Redirecting to:", redirectUrl);
-                    window.location.href = redirectUrl;
-                } else {
-                    console.warn("Verification failed:", result.message);
-                    alert("Error: " + result.message);
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "Verify";
-                }
-
-            } catch (error) {
-                console.error("Network or Fetch error:", error);
-                alert("Could not reach the verification server.");
+            if (result.status === "success") {
+                console.log("Success! Redirecting to login...");
+                window.location.href = redirectUrl;
+            } else {
+                alert("Verification Failed: " + result.message);
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Verify";
             }
-        });
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            alert("Connection error. Is the API at 9443 reachable?");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Verify";
+        }
     };
 
-    // Run init
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initVerify);
+    // Attach to the form
+    const formElement = document.getElementById('verifyForm');
+    if (formElement) {
+        formElement.onsubmit = handleVerification;
+        console.log("Listener successfully attached to #verifyForm");
     } else {
-        initVerify();
+        console.error("Could not find #verifyForm in the DOM!");
     }
 })();

@@ -73,11 +73,11 @@
                 ⚠️ <span id="error-message"></span>
             </div>
 
-            <form data-redirect="login.jsp" data-validate>
+            <form id="verifyForm" data-redirect="login.jsp" data-validate>
 
                 <div class="form-group">
                     <label class="form-label" for="verify">🔢 Verification Code</label>
-                    <input class="form-input"
+                    <input class="form-input otp-field"
                            autofocus
                            id="verify"
                            name="verify"
@@ -89,7 +89,7 @@
                            pattern="[A-Za-z0-9]{10}">
                 </div>
 
-                <button class="btn btn-primary" type="submit">
+                <button id="verifyBtn" class="btn btn-primary" type="submit">
                     Verify
                     <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18">
                         <line x1="5" x2="19" y1="12" y2="12"/>

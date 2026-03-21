@@ -80,9 +80,11 @@
                     <input class="form-input otp-field"
                            autofocus
                            id="verify"
+                           name="verify"
                            placeholder="_ _ _ _ _ _ _ _ _ _"
                            maxlength="10"
                            required
+                           type="text"
                            title="10 alphanumeric characters"
                            pattern="[A-Za-z0-9]{10}">
                 </div>

@@ -29,61 +29,80 @@
  *                                                                            *
  ******************************************************************************/
 
-document.addEventListener('DOMContentLoaded', () => {
-    const verifyForm = document.getElementById('verifyForm');
-    if (!verifyForm) return;
+// This wrapper ensures the script waits for the HTML to load
+(function() {
+    console.log("Verify script initialized.");
 
-    const API_VERIFY_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/verify";
+    const initVerify = () => {
+        const form = document.querySelector('form[data-redirect="login.jsp"]');
 
-    verifyForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        if (!form) {
+            console.error("Verification form not found! Check if data-redirect is set.");
+            return;
+        }
 
-        const submitBtn = verifyForm.querySelector('button[type="submit"]');
-        const errorAlert = document.getElementById('error-alert');
-        const errorText = document.getElementById('error-message');
-        const redirectUrl = verifyForm.getAttribute('data-redirect');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Form submitted. Intercepting...");
 
-        // Reset UI
-        errorAlert.style.display = 'none';
-        submitBtn.disabled = true;
-        const originalContent = submitBtn.innerHTML;
-        submitBtn.innerText = "Verifying...";
+            const inputField = document.getElementById('verify');
+            const submitBtn = form.querySelector('button[type="submit"]');
 
-        // Payload: Maps HTML 'verify' value to API 'token' key
-        const payload = {
-            token: document.getElementById('verify').value.trim()
-        };
+            // Collect value
+            const codeValue = inputField.value.trim();
+            console.log("Collected Token:", codeValue);
 
-        try {
-            const response = await fetch(API_VERIFY_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.status === "success") {
-                // SUCCESS: Proceed to login
-                console.log("Verification success:", result.message);
-                window.location.href = redirectUrl;
-            } else {
-                // ERROR: Show the "Invalid code" or "Expired" message from your API
-                errorText.innerText = result.message || "Verification failed. Please try again.";
-                errorAlert.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalContent;
+            if (codeValue.length !== 10) {
+                alert("Please enter all 10 characters.");
+                return;
             }
 
-        } catch (error) {
-            console.error("Connection Error:", error);
-            errorText.innerText = "Cannot connect to Ominet Auth service.";
-            errorAlert.style.display = 'block';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalContent;
-        }
-    });
-});
+            const API_URL = "https://ominet.aerosimo.com:9443/authcore/api/auth/verify";
+            const redirectUrl = form.getAttribute('data-redirect');
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Verifying...";
+
+                console.log("Sending request to:", API_URL);
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ token: codeValue })
+                });
+
+                console.log("Response status:", response.status);
+
+                const result = await response.json();
+                console.log("API Result:", result);
+
+                if (result.status === "success") {
+                    console.log("Success! Redirecting to:", redirectUrl);
+                    window.location.href = redirectUrl;
+                } else {
+                    console.warn("Verification failed:", result.message);
+                    alert("Error: " + result.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Verify";
+                }
+
+            } catch (error) {
+                console.error("Network or Fetch error:", error);
+                alert("Could not reach the verification server.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Verify";
+            }
+        });
+    };
+
+    // Run init
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initVerify);
+    } else {
+        initVerify();
+    }
+})();

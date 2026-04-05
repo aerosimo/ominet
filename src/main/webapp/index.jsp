@@ -159,7 +159,7 @@
                 <div class="stat-card-inner">
                     <div class="stat-info">
                         <h3>Jenkins CI / CD</h3>
-                        <div class="stat-value">2</div>
+                        <div class="stat-value">2.541.3</div>
                         <span id="status-jenkins">
                             <span class="stat-change positive">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>

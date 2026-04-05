@@ -95,46 +95,64 @@
     // ============================================
     // Animated Counters
     // ============================================
-    function animateCounter(element, target, duration = 2000) {
-        const start = 0;
+    // ============================================
+    // Enhanced Animated Counters (Supports Versions)
+    // ============================================
+    function animateValue(element, start, end, duration, prefix = '', suffix = '') {
         const startTime = performance.now();
 
         function update(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
 
-            // Easing function
+            // Cubic ease-out
             const easeOut = 1 - Math.pow(1 - progress, 3);
-            const current = Math.floor(start + (target - start) * easeOut);
 
-            if (element.dataset.prefix) {
-                element.textContent = element.dataset.prefix + current.toLocaleString() + (element.dataset.suffix || '');
-            } else {
-                element.textContent = current.toLocaleString() + (element.dataset.suffix || '');
-            }
+            // Calculate the current value
+            const current = Math.floor(start + (end - start) * easeOut);
+
+            element.textContent = prefix + current.toLocaleString() + suffix;
 
             if (progress < 1) {
                 requestAnimationFrame(update);
             }
         }
-
         requestAnimationFrame(update);
     }
 
     function initCounters() {
         const counters = document.querySelectorAll('.stat-value');
+
         counters.forEach(counter => {
-            const text = counter.textContent;
-            const value = parseInt(text.replace(/[^0-9]/g, ''));
+            const originalText = counter.textContent.trim();
 
-            if (text.includes('$')) {
-                counter.dataset.prefix = '$';
-            }
-            if (text.includes('%')) {
-                counter.dataset.suffix = '%';
-            }
+            // Check if it's a version number (contains dots)
+            if (originalText.includes('.')) {
+                const segments = originalText.split('.');
+                counter.textContent = ''; // Clear for animation
 
-            animateCounter(counter, value);
+                // Create a span for each version segment to animate separately
+                segments.forEach((seg, index) => {
+                    const segSpan = document.createElement('span');
+                    counter.appendChild(segSpan);
+
+                    // Add dot separator between segments
+                    if (index < segments.length - 1) {
+                        counter.appendChild(document.createTextNode('.'));
+                    }
+
+                    const targetVal = parseInt(seg) || 0;
+                    animateValue(segSpan, 0, targetVal, 2000);
+                });
+            }
+            else {
+                // Standard Logic for Currency/Percentage/Whole Numbers
+                const prefix = originalText.includes('$') ? '$' : '';
+                const suffix = originalText.includes('%') ? '%' : '';
+                const targetVal = parseInt(originalText.replace(/[^0-9]/g, '')) || 0;
+
+                animateValue(counter, 0, targetVal, 2000, prefix, suffix);
+            }
         });
     }
 

@@ -29,6 +29,9 @@
   ~                                                                           ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page session="true"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +99,7 @@
                 <span class="nav-section-title">Account</span>
                 <ul>
                     <li class="nav-item">
-                        <a href="logout.jsp" class="nav-link">
+                        <a href="<%= request.getContextPath() %>/auth/logout" class="nav-link">
                             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                                 <polyline points="16 17 21 12 16 7"/>
@@ -139,10 +142,12 @@
                     <div class="stat-info">
                         <h3>Oracle Linux</h3>
                         <div class="stat-value">10</div>
-                        <span class="stat-change positive">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-                                online
+                        <span id="status-linux">
+                            <span class="stat-change positive">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                    online
                             </span>
+                        </span>
                     </div>
                     <div class="server-menu">
                         <img src="assets/img/server/linux.png" alt="Oracle Linux Server" class="server">
@@ -155,10 +160,12 @@
                     <div class="stat-info">
                         <h3>Jenkins CI / CD</h3>
                         <div class="stat-value">2</div>
-                        <span class="stat-change positive">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-                                online
+                        <span id="status-jenkins">
+                            <span class="stat-change positive">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                    online
                             </span>
+                        </span>
                     </div>
                     <div class="server-menu">
                         <img src="assets/img/server/jenkins.png" alt="Jenkins Server" class="server">
@@ -171,10 +178,12 @@
                     <div class="stat-info">
                         <h3>Oracle Database 26ai</h3>
                         <div class="stat-value">26</div>
-                        <span class="stat-change negative">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
-                                offline
+                        <span id="status-oracle">
+                            <span class="stat-change positive">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                    online
                             </span>
+                        </span>
                     </div>
                     <div class="server-menu">
                         <img src="assets/img/server/oracle.jpeg" alt="Oracle Database" class="server">
@@ -187,10 +196,12 @@
                     <div class="stat-info">
                         <h3>Apache Tomcat 11</h3>
                         <div class="stat-value">11</div>
-                        <span class="stat-change positive">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-                                online
+                        <span id="status-tomee">
+                            <span class="stat-change positive">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                    online
                             </span>
+                        </span>
                     </div>
                     <div class="server-menu">
                         <img src="assets/img/server/tomee.png" alt="Apache Tomcat Server" class="server">
@@ -456,5 +467,6 @@
 </footer>
 
 <script src="assets/js/script.js"></script>
+<script src="assets/js/server.js"></script>
 </body>
 </html>

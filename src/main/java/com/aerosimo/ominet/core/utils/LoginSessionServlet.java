@@ -46,35 +46,35 @@ import java.io.IOException;
 public class LoginSessionServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         // Essential for modern AJAX
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
         try {
             // Read JSON from the incoming request body
-            JSONObject data = new JSONObject(new JSONTokener(request.getInputStream()));
+            JSONObject data = new JSONObject(new JSONTokener(req.getInputStream()));
             String username = data.optString("username", "Unknown");
             String token = data.optString("token", "");
 
             // Handle the Session (Standard Jakarta EE)
-            HttpSession session = request.getSession(true);
+            HttpSession session = req.getSession(true);
             session.setAttribute("user", username);
             session.setAttribute("session_token", token);
 
             // Send success response
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("{\"status\":\"success\"}");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("{\"status\":\"success\"}");
 
         } catch (Exception e) {
             // This logs the error to your Jenkins console / Tomcat logs
             e.printStackTrace();
 
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             // Sending the error back to the browser helps us debug
-            response.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
+            resp.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
         }
     }
 }

@@ -289,7 +289,6 @@
         initTiltEffect();
         initCounters();
         initMobileMenu();
-        initFormValidation();
         initPasswordToggle();
         initPageTransitions();
         initSettingsTabs();

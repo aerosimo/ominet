@@ -352,7 +352,7 @@
                         <p id="horoscope-subtitle" class="card-subtitle">Your daily celestial guidance</p>
                     </div>
                 </div>
-                <div class="donut-container" style="position: relative; min-height: 220px;">
+                <div class="donut-container" style="position: relative; min-height: 120px;">
                     <div class="donut-chart">
                         <div class="zodiac-menu">
                             <img id="zodiac-img" src="assets/img/zodiac/astrology.jpg" alt="User zodiac" class="zodiac">

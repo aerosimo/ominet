@@ -127,7 +127,7 @@
     <main class="main-content">
         <!-- Top Navbar -->
         <nav class="navbar">
-            <h1 class="page-title"><strong>${sessionScope.user}</strong> Dashboard Overview</h1>
+            <h1 class="page-title">Dashboard Overview</h1>
             <div class="navbar-right">
                 <div class="user-menu">
                     <img src="assets/img/user/user.webp" alt="User Avatar" class="avatar">
@@ -375,13 +375,14 @@
             </div>
 
         </section>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="copy">&copy; <script>document.write(new Date().getFullYear());</script> Ominet by Aerosimo Ltd. All rights reserved.</div>
+        </footer>
+
     </main>
 </div>
-
-<!-- Footer -->
-<footer class="site-footer">
-    <div class="copy">&copy; <script>document.write(new Date().getFullYear());</script> Ominet by Aerosimo Ltd. All rights reserved.</div>
-</footer>
 
 <script src="assets/js/script.js"></script>
 <script src="assets/js/server.js"></script>

@@ -33,7 +33,11 @@ async function fetchHoroscope() {
     const uname = window.CURRENT_USER;
     const token = window.AUTH_TOKEN;
 
-    if (!uname || !token) return;
+    // Safety check for session
+    if (!uname || !token) {
+        console.warn("Horoscope: Missing session data (User/Token)");
+        return;
+    }
 
     const url = `/persona/api/prime/announcer/${uname}`;
 
@@ -46,32 +50,33 @@ async function fetchHoroscope() {
             }
         });
 
-        const data = await response.json();
-
-        // 1. Check if the backend sent the "unsuccessful" DTO
-        if (!response.ok || data.status === "unsuccessful") {
+        // Handle empty or error responses
+        if (!response.ok) {
             handleMissingHoroscope();
             return;
         }
 
-        // 2. Otherwise, render normally
-        renderHoroscope(data);
+        const data = await response.json();
+
+        if (data.status === "unsuccessful") {
+            handleMissingHoroscope();
+        } else {
+            renderHoroscope(data);
+        }
 
     } catch (error) {
         console.error("Horoscope fetch failed:", error);
-        handleMissingHoroscope(); // Default to fallback on network error too
+        handleMissingHoroscope();
     }
 }
 
 function handleMissingHoroscope() {
-    // A. Set default Image
-    document.getElementById('zodiac-img').src = `assets/img/zodiac/astrology.jpg`;
+    const img = document.getElementById('zodiac-img');
+    if (img) img.src = `assets/img/zodiac/astrology.jpg`;
 
-    // B. Set current date
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('zodiac-date').innerText = today;
 
-    // C. Set fallback text
+    document.getElementById('zodiac-date').innerText = today;
     document.getElementById('zodiac-name').innerText = "Awaiting Alignment";
     document.getElementById('zodiac-narrative').innerHTML =
         `Your celestial path is currently hidden. <br><br>
@@ -80,3 +85,23 @@ function handleMissingHoroscope() {
 
     document.getElementById('horoscope-subtitle').innerText = "Profile update required";
 }
+
+function renderHoroscope(data) {
+    console.log("Rendering Horoscope Data:", data);
+
+    const sign = data.zodiacSign || 'Unknown';
+    const signLower = sign.toLowerCase();
+
+    const imgElement = document.getElementById('zodiac-img');
+    if (imgElement) {
+        imgElement.src = `assets/img/zodiac/${signLower}.jpg`;
+    }
+
+    document.getElementById('zodiac-name').innerText = sign;
+    document.getElementById('zodiac-date').innerText = data.currentDay || "";
+    document.getElementById('zodiac-narrative').innerText = data.narrative || "No narrative available for today.";
+    document.getElementById('horoscope-subtitle').innerText = `Celestial guidance for ${sign}`;
+}
+
+// --- THE ENGINE START ---
+document.addEventListener('DOMContentLoaded', fetchHoroscope);

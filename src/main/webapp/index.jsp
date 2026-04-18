@@ -220,35 +220,17 @@
                         <p class="card-subtitle">Realtime performance indicators</p>
                     </div>
                     <div class="card-actions">
-                        <button class="card-btn active">Disk Usage</button>
-                        <button class="card-btn">Memory Usage</button>
-                        <button class="card-btn">CPU Thread Activity</button>
+                        <button class="card-btn active" onclick="updateChart('disk')">Disk Usage</button>
+                        <button class="card-btn" onclick="updateChart('memory')">Memory Usage</button>
+                        <button class="card-btn" onclick="updateChart('cpu')">CPU Thread Activity</button>
                     </div>
                 </div>
                 <div class="chart-wrapper">
                     <div class="chart-container">
-                        <div class="chart-y-axis">
-                            <span class="y-value">$100K</span>
-                            <span class="y-value">$80K</span>
-                            <span class="y-value">$60K</span>
-                            <span class="y-value">$40K</span>
-                            <span class="y-value">$20K</span>
-                            <span class="y-value">$0</span>
-                        </div>
-                        <div class="chart-placeholder">
-                            <div class="chart-bar-group"><div class="chart-bar bar-emerald" style="height: 120px;"></div><span class="chart-label">Jan</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-gold" style="height: 160px;"></div><span class="chart-label">Feb</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-sapphire" style="height: 90px;"></div><span class="chart-label">Mar</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-ruby" style="height: 140px;"></div><span class="chart-label">Apr</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-amethyst" style="height: 180px;"></div><span class="chart-label">May</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-teal" style="height: 130px;"></div><span class="chart-label">Jun</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-orange" style="height: 170px;"></div><span class="chart-label">Jul</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-indigo" style="height: 150px;"></div><span class="chart-label">Aug</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-magenta" style="height: 190px;"></div><span class="chart-label">Sep</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-slate" style="height: 140px;"></div><span class="chart-label">Oct</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-lime" style="height: 175px;"></div><span class="chart-label">Nov</span></div>
-                            <div class="chart-bar-group"><div class="chart-bar bar-bronze" style="height: 200px;"></div><span class="chart-label">Dec</span></div>
-                        </div>
+                        <div class="chart-y-axis" id="yAxis">
+                            </div>
+                        <div class="chart-placeholder" id="chartBars">
+                            </div>
                     </div>
                 </div>
             </div>
@@ -468,5 +450,6 @@
 
 <script src="assets/js/script.js"></script>
 <script src="assets/js/server.js"></script>
+<script src="assets/js/metrics.js"></script>
 </body>
 </html>

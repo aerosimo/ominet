@@ -30,8 +30,17 @@
  ******************************************************************************/
 
 async function fetchProfileStatus() {
-    const uname = window.CURRENT_USER || 'admin';
-    const url = `/persona/api/prime/flow/${uname}`;
+    // 1. Get the user from the window object (set by the JSP)
+    const uname = window.CURRENT_USER;
+
+    // 2. If uname is empty/null, don't call the API
+    if (!uname || uname === "" || uname === "null") {
+        console.warn("No session user found. Skipping profile fetch.");
+        document.getElementById('profile-message').innerText = "Please log in";
+        return;
+    }
+
+    const url = `/infraguard/api/prime/flow/${uname}`;
 
     try {
         const response = await fetch(url);
@@ -39,22 +48,15 @@ async function fetchProfileStatus() {
 
         const data = await response.json();
 
-        // Use a safer way to extract the number
-        let percent = 0;
-        if (data.message) {
-            // This pulls any digits and decimals found in the string
-            const matches = data.message.match(/(\d+(\.\d+)?)/);
-            if (matches) {
-                percent = parseFloat(matches[0]);
-            }
-        }
+        // 3. Extract the percentage (e.g., "4.55") from the message string
+        const matches = data.message.match(/(\d+(\.\d+)?)/);
+        const percent = matches ? parseFloat(matches[0]) : 0;
 
-        console.log("Profile Completion parsed as:", percent);
         updateProfileDonut(percent);
 
     } catch (error) {
         console.error("Profile fetch failed:", error);
-        document.getElementById('profile-message').innerText = "Service Unavailable";
+        document.getElementById('profile-message').innerText = "Status Unavailable";
     }
 }
 

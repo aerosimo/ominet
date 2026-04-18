@@ -2,9 +2,9 @@
  * This piece of work is to enhance ominet project functionality.             *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      spectre.js                                                      *
- * Created:   18/04/2026, 11:53                                               *
- * Modified:  18/04/2026, 11:53                                               *
+ * File:      manna.js                                                        *
+ * Created:   18/04/2026, 13:25                                               *
+ * Modified:  18/04/2026, 13:25                                               *
  *                                                                            *
  * Copyright (c)  2026.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,58 +29,27 @@
  *                                                                            *
  ******************************************************************************/
 
-async function fetchErrors() {
-    const url = '/spectre/api/errors/retrieve?records=5';
+async function fetchDailyBread() {
+    const url = '/manna/api/dailybread/gift';
     try {
         const response = await fetch(url);
-        const errors = await response.json();
-        renderErrorTable(errors);
+        const manna = await response.json();
+
+        // Inject data into the card
+        document.getElementById('manna-passage').innerText = manna.passage;
+        document.getElementById('manna-verse').innerText = manna.verse;
+        document.getElementById('manna-version').innerText = manna.version;
+
     } catch (error) {
-        console.error("Spectre fetch failed:", error);
+        console.error("Manna fetch failed:", error);
+        document.getElementById('manna-passage').innerText = "The connection to the Manna service was lost.";
     }
 }
 
-function renderErrorTable(errors) {
-    const tbody = document.getElementById('errorTableBody');
-
-    tbody.innerHTML = errors.map(err => {
-        // Map Spectre Status to your CSS classes
-        let statusClass = 'pending'; // Default
-        const status = err.errorStatus.toUpperCase();
-
-        if (status === 'RESOLVED' || status === 'CLOSED') statusClass = 'completed';
-        else if (status === 'OPEN') statusClass = 'processing'; // Use Blue for Open
-        else if (status === 'PENDING') statusClass = 'pending'; // Use Gold for Pending
-
-        // Shorten the message if it's too long for the table cell
-        const shortMsg = err.errorMessage.length > 100
-            ? err.errorMessage.substring(0, 100) + '...'
-            : err.errorMessage;
-
-        // Extract time (HH:mm:ss)
-        const timePart = err.errorTime.split(' ')[1].substring(0, 8);
-
-        return `
-            <tr>
-                <td><strong>#${err.errorID}</strong></td>
-                <td style="font-family: 'Space Mono', monospace; font-size: 12px;">${err.errorRef}</td>
-                <td>${timePart}</td>
-                <td><code style="color: var(--text-primary)">${err.errorCode}</code></td>
-                <td title="${err.errorMessage}">${shortMsg}</td>
-                <td style="font-size: 11px;">${err.errorService.split('.').pop()}</td>
-                <td><span class="status-badge ${statusClass}">${err.errorStatus}</span></td>
-                <td><span style="font-size: 11px; opacity: 0.8;">${err.errorSate}</span></td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// Update your initialization
+// Update your main entry point
 document.addEventListener('DOMContentLoaded', () => {
     fetchMetrics();
     fetchHealth();
-    fetchErrors(); // Initial load
-
-    // Auto-refresh errors every 60 seconds
-    setInterval(fetchErrors, 60000);
+    fetchErrors();
+    fetchDailyBread(); // New Daily Bread call
 });

@@ -280,27 +280,36 @@
         <section class="bottom-grid">
 
             <!-- Daily Bread -->
-            <div class="glass-card progress-card">
+            <div class="glass-card progress-card glass-card-3d">
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Daily Bread</h2>
-                        <p class="card-subtitle">Daily Manna for personal development and reflection</p>
+                        <p class="card-subtitle">Personal development & reflection</p>
                     </div>
                 </div>
                 <div class="progress-item">
                     <div class="progress-header"><span class="progress-label">Passage</span></div>
                     <div class="progress-bar"><div class="progress-fill cyan" style="width: 100%;"></div></div>
-                    <div class="legend-item"><span class="legend-color cyan"></span><span>To those who by persistence in doing good seek glory, honor and immortality, he will give eternal life. But for those who are self-seeking and who reject the truth and follow evil, there will be wrath and anger.</span></div>
+                    <div class="legend-item">
+                        <span class="legend-color cyan"></span>
+                        <span id="manna-passage" style="font-style: italic; line-height: 1.6;">Loading...</span>
+                    </div>
                 </div>
                 <div class="progress-item">
                     <div class="progress-header"><span class="progress-label">Verse</span></div>
                     <div class="progress-bar"><div class="progress-fill magenta" style="width: 100%;"></div></div>
-                    <div class="legend-item"><span class="legend-color magenta"></span><span>Romans 2:7-8</span></div>
+                    <div class="legend-item">
+                        <span class="legend-color magenta"></span>
+                        <strong id="manna-verse" style="color: var(--text-primary);">...</strong>
+                    </div>
                 </div>
                 <div class="progress-item">
                     <div class="progress-header"><span class="progress-label">Version</span></div>
                     <div class="progress-bar"><div class="progress-fill slate" style="width: 100%;"></div></div>
-                    <div class="legend-item"><span class="legend-color slate"></span><span>NIV</span></div>
+                    <div class="legend-item">
+                        <span class="legend-color slate"></span>
+                        <span id="manna-version">...</span>
+                    </div>
                 </div>
             </div>
 
@@ -368,5 +377,6 @@
 <script src="assets/js/metrics.js"></script>
 <script src="assets/js/activity.js"></script>
 <script src="assets/js/spectre.js"></script>
+<script src="assets/js/manna.js"></script>
 </body>
 </html>

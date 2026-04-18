@@ -381,7 +381,10 @@
 <script src="assets/js/activity.js"></script>
 <script src="assets/js/spectre.js"></script>
 <script src="assets/js/manna.js"></script>
-<script>window.CURRENT_USER = "${sessionScope.user}";</script>
+<script>
+    window.CURRENT_USER = "${sessionScope.user}";
+    window.AUTH_TOKEN = "${sessionScope.session_token}"; // Hand off the token
+</script>
 <script src="assets/js/status.js"></script>
 </body>
 </html>

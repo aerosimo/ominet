@@ -30,25 +30,33 @@
  ******************************************************************************/
 
 async function fetchProfileStatus() {
-    // 1. Get the user from the window object (set by the JSP)
     const uname = window.CURRENT_USER;
+    const token = window.AUTH_TOKEN;
 
-    // 2. If uname is empty/null, don't call the API
-    if (!uname || uname === "" || uname === "null") {
-        console.warn("No session user found. Skipping profile fetch.");
-        document.getElementById('profile-message').innerText = "Please log in";
+    // 1. Safety check: If no token or user, don't even try
+    if (!uname || !token) {
+        console.error("Missing Auth Token or User Session");
+        document.getElementById('profile-message').innerText = "Session Expired";
         return;
     }
 
     const url = `/infraguard/api/prime/flow/${uname}`;
 
     try {
-        const response = await fetch(url);
+        // 2. Add the Headers to the fetch request
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': token, 
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const data = await response.json();
 
-        // 3. Extract the percentage (e.g., "4.55") from the message string
+        // 3. Parse the percentage from "Profile completion: 4.55%"
         const matches = data.message.match(/(\d+(\.\d+)?)/);
         const percent = matches ? parseFloat(matches[0]) : 0;
 

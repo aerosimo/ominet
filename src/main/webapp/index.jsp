@@ -345,23 +345,32 @@
             </div>
 
             <!-- Daily Horoscope -->
-            <div class="glass-card">
+            <div class="glass-card glass-card-3d">
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Daily Horoscope</h2>
-                        <p class="card-subtitle">A calm and focused day lies ahead.</p>
+                        <p id="horoscope-subtitle" class="card-subtitle">Your daily celestial guidance</p>
                     </div>
                 </div>
-                <div class="donut-container">
+                <div class="donut-container" style="position: relative; min-height: 220px;">
                     <div class="donut-chart">
                         <div class="zodiac-menu">
-                            <img src="assets/img/zodiac/aquarius.jpg" alt="User zodiac" class="zodiac">
+                            <img id="zodiac-img" src="assets/img/zodiac/astrology.jpg" alt="User zodiac" class="zodiac">
                         </div>
                     </div>
                     <div class="zodiac-legend">
-                        <div class="legend-item"><span class="legend-color magenta"></span><span>Aquarius</span></div>
-                        <div class="legend-item"><span class="legend-color slate"></span><span>Feb 9, 2026</span></div>
-                        <div class="legend-item"><span class="legend-color cyan"></span><span>News could come your way, perhaps through local magazines or newspapers, about possible renovations occurring in your community. These changes could be rather controversial, Aquarius, so don't be surprised if you hear a lot of gossip and a number of opinions, both pro and con, on the matter. You might want to delve more deeply into the facts before forming an opinion of your own. This could prove quite enlightening! </span></div>
+                        <div class="legend-item">
+                            <span class="legend-color magenta"></span>
+                            <strong id="zodiac-name" style="color: var(--text-primary); font-size: 16px;">Loading...</strong>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color slate"></span>
+                            <span id="zodiac-date">...</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color cyan"></span>
+                            <span id="zodiac-narrative" style="line-height: 1.5; font-size: 13px;">...</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -386,5 +395,6 @@
     window.AUTH_TOKEN = "${sessionScope.session_token}"; // Hand off the token
 </script>
 <script src="assets/js/status.js"></script>
+<script src="assets/js/zodiac.js"></script>
 </body>
 </html>

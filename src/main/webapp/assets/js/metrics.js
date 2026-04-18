@@ -37,7 +37,7 @@ let metricsData = null;
 
 async function fetchMetrics() {
     try {
-        const response = await fetch('/api/metric');
+        const response = await fetch('/infraguard/api/guard/metric');
         metricsData = await response.json();
         console.log("Data Received:", metricsData); // Debug check
         updateChart('disk');

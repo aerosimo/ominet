@@ -314,29 +314,32 @@
             </div>
 
             <!-- Profile Status -->
-            <div class="glass-card">
+            <div class="glass-card glass-card-3d">
                 <div class="card-header">
                     <div>
                         <h2 class="card-title">Profile Status</h2>
-                        <p class="card-subtitle">Completion of your account details</p>
+                        <p class="card-subtitle">Account details completion</p>
                     </div>
                 </div>
                 <div class="donut-container">
                     <div class="donut-chart">
                         <svg width="140" height="140" viewBox="0 0 140 140">
                             <circle class="donut-bg" cx="70" cy="70" r="54"/>
-                            <circle class="donut-segment" cx="70" cy="70" r="54" stroke="var(--blue)" stroke-dasharray="169.6 339.3" stroke-dashoffset="0"/>
-                            <circle class="donut-segment" cx="70" cy="70" r="54" stroke="var(--gold)" stroke-dasharray="101.8 339.3" stroke-dashoffset="-169.6"/>
-                            <circle class="donut-segment" cx="70" cy="70" r="54" stroke="var(--red)" stroke-dasharray="67.9 339.3" stroke-dashoffset="-271.4"/>
+                            <circle id="profile-segment" class="donut-segment" cx="70" cy="70" r="54"
+                                    stroke="var(--emerald-light)"
+                                    stroke-dasharray="0 339.29"
+                                    stroke-dashoffset="0"/>
                         </svg>
                         <div class="donut-center">
-                            <div class="donut-value">82%</div>
+                            <div id="profile-value" class="donut-value">0%</div>
                             <div class="donut-label">Complete</div>
                         </div>
                     </div>
                     <div class="donut-legend">
-                        <div class="legend-item"><span class="legend-color cyan"></span><span>Congratulations your profile is complete</span></div>
-                        <div class="legend-item"><span class="legend-color slate"></span><span>Update the missing information in your profile settings</span></div>
+                        <div class="legend-item" id="profile-status-msg">
+                            <span id="profile-legend-color" class="legend-color slate"></span>
+                            <span id="profile-message">Calculating...</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -378,5 +381,6 @@
 <script src="assets/js/activity.js"></script>
 <script src="assets/js/spectre.js"></script>
 <script src="assets/js/manna.js"></script>
+<script src="assets/js/status.js"></script>
 </body>
 </html>

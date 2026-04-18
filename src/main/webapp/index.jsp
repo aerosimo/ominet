@@ -258,69 +258,19 @@
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Reference</th>
-                            <th>Time</th>
-                            <th>Code</th>
-                            <th>Message</th>
-                            <th>Service</th>
-                            <th>Status</th>
-                            <th>State</th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Reference</th>
+                                <th>Time</th>
+                                <th>Code</th>
+                                <th>Message</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>State</th>
+                            </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td><div class="table-user"><div class="table-user-info"><span class="table-user-name">John Doe</span><span class="table-user-email">john@example.com</span></div></div></td>
-                            <td>Premium Plan</td>
-                            <td>Jan 15, 2025</td>
-                            <td><span class="status-badge completed">Completed</span></td>
-                            <td><span class="table-amount">$299.00</span></td>
-                            <td>Premium Plan</td>
-                            <td>Jan 15, 2025</td>
-                            <td>Jan 15, 2025</td>
-                        </tr>
-                        <tr>
-                            <td><div class="table-user"><div class="table-user-info"><span class="table-user-name">Anna Smith</span><span class="table-user-email">anna@example.com</span></div></div></td>
-                            <td>Enterprise License</td>
-                            <td>Jan 14, 2025</td>
-                            <td><span class="status-badge processing">Processing</span></td>
-                            <td><span class="table-amount">$1,499.00</span></td>
-                            <td>Premium Plan</td>
-                            <td>Jan 15, 2025</td>
-                            <td>Jan 15, 2025</td>
-                        </tr>
-                        <tr>
-                            <td><div class="table-user"><div class="table-user-info"><span class="table-user-name">Mike Johnson</span><span class="table-user-email">mike@example.com</span></div></div></td>
-                            <td>Team Bundle</td>
-                            <td>Jan 13, 2025</td>
-                            <td><span class="status-badge completed">Completed</span></td>
-                            <td><span class="table-amount">$599.00</span></td>
-                            <td>Premium Plan</td>
-                            <td>Jan 15, 2025</td>
-                            <td>Jan 15, 2025</td>
-                        </tr>
-                        <tr>
-                            <td><div class="table-user"><div class="table-user-info"><span class="table-user-name">Emily White</span><span class="table-user-email">emily@example.com</span></div></div></td>
-                            <td>Starter Plan</td>
-                            <td>Jan 12, 2025</td>
-                            <td><span class="status-badge pending">Pending</span></td>
-                            <td><span class="table-amount">$49.00</span></td>
-                            <td>Premium Plan</td>
-                            <td>Jan 15, 2025</td>
-                            <td>Jan 15, 2025</td>
-                        </tr>
-                        <tr>
-                            <td><div class="table-user"><div class="table-user-info"><span class="table-user-name">Robert Brown</span><span class="table-user-email">robert@example.com</span></div></div></td>
-                            <td>Pro Annual</td>
-                            <td>Jan 11, 2025</td>
-                            <td><span class="status-badge completed">Completed</span></td>
-                            <td><span class="table-amount">$199.00</span></td>
-                            <td>Premium Plan</td>
-                            <td>Jan 15, 2025</td>
-                            <td>Jan 15, 2025</td>
-                        </tr>
-                        </tbody>
+                        <tbody id="errorTableBody">
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -417,5 +367,6 @@
 <script src="assets/js/server.js"></script>
 <script src="assets/js/metrics.js"></script>
 <script src="assets/js/activity.js"></script>
+<script src="assets/js/spectre.js"></script>
 </body>
 </html>

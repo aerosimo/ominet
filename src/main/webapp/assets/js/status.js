@@ -33,21 +33,16 @@ async function fetchProfileStatus() {
     const uname = window.CURRENT_USER;
     const token = window.AUTH_TOKEN;
 
-    // 1. Safety check: If no token or user, don't even try
-    if (!uname || !token) {
-        console.error("Missing Auth Token or User Session");
-        document.getElementById('profile-message').innerText = "Session Expired";
-        return;
-    }
+    if (!uname || !token) return;
 
-    const url = `/infraguard/api/prime/flow/${uname}`;
+    // CHANGED: /infraguard -> /persona
+    const url = `/persona/api/prime/flow/${uname}`;
 
     try {
-        // 2. Add the Headers to the fetch request
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': token, 
+                'Authorization': token,
                 'Content-Type': 'application/json'
             }
         });
@@ -55,8 +50,6 @@ async function fetchProfileStatus() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const data = await response.json();
-
-        // 3. Parse the percentage from "Profile completion: 4.55%"
         const matches = data.message.match(/(\d+(\.\d+)?)/);
         const percent = matches ? parseFloat(matches[0]) : 0;
 

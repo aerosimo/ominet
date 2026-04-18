@@ -1373,9 +1373,11 @@ a {
 ============================================ */
 .donut-container {
     display: flex;
-    align-items: center;
+    align-items: center; /* Vertical center */
     gap: 30px;
     margin-top: 20px;
+    position: relative;
+    width: 100%;
 }
 
 .donut-chart {
@@ -1454,27 +1456,27 @@ a {
     align-items: center;
     gap: 20px;
     position: relative;
+    flex-shrink: 0;
 }
 
 .zodiac {
-    width: 200px;
-    height: 200px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    flex-shrink: 0;
+    object-fit: cover;
+    border: 2px solid var(--glass-border);
 }
 
 .zodiac-legend {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    position: absolute;
-    left: 250px;
-    top: 100px;
-    z-index: 10;
-    max-width: 450px;
-    max-height: 250px;
+    gap: 8px;
+    flex: 1;
+    position: relative;
+    left: 0;
+    top: 0;
+    max-height: 150px;
     overflow-y: auto;
-    padding-right: 10px;
 }
 
 .zodiac-legend::-webkit-scrollbar {

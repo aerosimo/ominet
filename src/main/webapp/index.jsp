@@ -352,24 +352,23 @@
                         <p id="horoscope-subtitle" class="card-subtitle">Your daily celestial guidance</p>
                     </div>
                 </div>
-                <div class="donut-container" style="position: relative; min-height: 120px;">
-                    <div class="donut-chart">
-                        <div class="zodiac-menu">
-                            <img id="zodiac-img" src="assets/img/zodiac/astrology.jpg" alt="User zodiac" class="zodiac">
-                        </div>
+                <div class="donut-container" style="min-height: 140px;">
+                    <div class="zodiac-menu">
+                        <img id="zodiac-img" src="assets/img/zodiac/scorpio.jpg" alt="User zodiac" class="zodiac">
                     </div>
+
                     <div class="zodiac-legend">
                         <div class="legend-item">
                             <span class="legend-color magenta"></span>
-                            <strong id="zodiac-name" style="color: var(--text-primary); font-size: 16px;">Loading...</strong>
+                            <strong id="zodiac-name">Scorpio</strong>
                         </div>
                         <div class="legend-item">
                             <span class="legend-color slate"></span>
-                            <span id="zodiac-date">...</span>
+                            <span id="zodiac-date">2026-04-18</span>
                         </div>
                         <div class="legend-item">
                             <span class="legend-color cyan"></span>
-                            <span id="zodiac-narrative" style="line-height: 1.5; font-size: 13px;">...</span>
+                            <span id="zodiac-narrative">...</span>
                         </div>
                     </div>
                 </div>

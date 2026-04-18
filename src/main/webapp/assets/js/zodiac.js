@@ -46,36 +46,37 @@ async function fetchHoroscope() {
             }
         });
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
         const data = await response.json();
+
+        // 1. Check if the backend sent the "unsuccessful" DTO
+        if (!response.ok || data.status === "unsuccessful") {
+            handleMissingHoroscope();
+            return;
+        }
+
+        // 2. Otherwise, render normally
         renderHoroscope(data);
 
     } catch (error) {
         console.error("Horoscope fetch failed:", error);
-        document.getElementById('zodiac-name').innerText = "Celestial error";
-        document.getElementById('zodiac-narrative').innerText = "Unable to read the stars at this moment.";
+        handleMissingHoroscope(); // Default to fallback on network error too
     }
 }
 
-function renderHoroscope(data) {
-    const sign = data.zodiacSign; // e.g., "Scorpio"
-    const signLower = sign.toLowerCase();
+function handleMissingHoroscope() {
+    // A. Set default Image
+    document.getElementById('zodiac-img').src = `assets/img/zodiac/astrology.jpg`;
 
-    // 1. Update Image
-    document.getElementById('zodiac-img').src = `assets/img/zodiac/${signLower}.jpg`;
+    // B. Set current date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('zodiac-date').innerText = today;
 
-    // 2. Update Text Fields
-    document.getElementById('zodiac-name').innerText = sign;
-    document.getElementById('zodiac-date').innerText = data.currentDay;
-    document.getElementById('zodiac-narrative').innerText = data.narrative;
+    // C. Set fallback text
+    document.getElementById('zodiac-name').innerText = "Awaiting Alignment";
+    document.getElementById('zodiac-narrative').innerHTML =
+        `Your celestial path is currently hidden. <br><br>
+        <strong>Note:</strong> Once you update your profile details (including your date of birth), 
+        your personalized daily horoscope will be revealed here.`;
 
-    // 3. Update Subtitle for a personal touch
-    document.getElementById('horoscope-subtitle').innerText = `A focused day ahead for ${sign}.`;
+    document.getElementById('horoscope-subtitle').innerText = "Profile update required";
 }
-
-// Call inside your DOMContentLoaded listener
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing calls
-    fetchHoroscope();
-});

@@ -381,6 +381,7 @@
 <script src="assets/js/activity.js"></script>
 <script src="assets/js/spectre.js"></script>
 <script src="assets/js/manna.js"></script>
+<script>const CURRENT_USER = "${sessionScope.user}";</script>
 <script src="assets/js/status.js"></script>
 </body>
 </html>

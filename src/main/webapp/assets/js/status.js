@@ -30,20 +30,31 @@
  ******************************************************************************/
 
 async function fetchProfileStatus() {
-    // uname is typically passed from the server side or stored in a global JS var
-    const uname = "${sessionScope.user}";
+    const uname = window.CURRENT_USER || 'admin';
     const url = `/persona/api/prime/flow/${uname}`;
 
     try {
         const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
         const data = await response.json();
 
-        // 1. Extract the number from the string "Profile completion: 4.55%"
-        const percentage = parseFloat(data.message.match(/[\d.]+/)[0]) || 0;
+        // Use a safer way to extract the number
+        let percent = 0;
+        if (data.message) {
+            // This pulls any digits and decimals found in the string
+            const matches = data.message.match(/(\d+(\.\d+)?)/);
+            if (matches) {
+                percent = parseFloat(matches[0]);
+            }
+        }
 
-        updateProfileDonut(percentage);
+        console.log("Profile Completion parsed as:", percent);
+        updateProfileDonut(percent);
+
     } catch (error) {
         console.error("Profile fetch failed:", error);
+        document.getElementById('profile-message').innerText = "Service Unavailable";
     }
 }
 

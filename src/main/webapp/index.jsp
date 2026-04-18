@@ -239,47 +239,12 @@
             <div class="glass-card activity-card">
                 <div class="card-header">
                     <div>
-                        <h2 class="card-title">Alerts & Logs</h2>
-                        <p class="card-subtitle">Latest transactions</p>
+                        <h2 class="card-title">System Health Feed</h2>
+                        <p class="card-subtitle" id="hostname-subtitle">ominet.aerosimo.com</p>
                     </div>
                 </div>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">⚠️</div>
-                        <div class="activity-content">
-                            <p class="activity-text">High CPU usage detected at 10:20</p>
-                            <span class="activity-time">2 minutes ago</span>
-                        </div>
+                <div class="activity-list" id="activityFeed">
                     </div>
-                    <div class="activity-item">
-                        <div class="activity-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">ℹ️</div>
-                        <div class="activity-content">
-                            <p class="activity-text">User admin logged in at 10:05</p>
-                            <span class="activity-time">15 minutes ago</span>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-avatar" style="background: linear-gradient(135deg, var(--coral), var(--gold));">✅</div>
-                        <div class="activity-content">
-                            <p class="activity-text">Backup completed successfully</p>
-                            <span class="activity-time">1 hour ago</span>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-avatar" style="background: linear-gradient(135deg, var(--gold), var(--amber));">ℹ️</div>
-                        <div class="activity-content">
-                            <p class="activity-text">Scheduled job completed</p>
-                            <span class="activity-time">2 hours ago</span>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-avatar" style="background: linear-gradient(135deg, var(--emerald-light), var(--emerald));">⚠️</div>
-                        <div class="activity-content">
-                            <p class="activity-text">Network latency spike detected</p>
-                            <span class="activity-time">3 hours ago</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Data Table -->
@@ -451,5 +416,6 @@
 <script src="assets/js/script.js"></script>
 <script src="assets/js/server.js"></script>
 <script src="assets/js/metrics.js"></script>
+<script src="assets/js/activity.js"></script>
 </body>
 </html>

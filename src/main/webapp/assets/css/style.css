@@ -950,6 +950,29 @@ a {
     font-weight: 500;
 }
 
+/* Ensure the axis and bar area have a base to stand on */
+.chart-container {
+    display: flex;
+    width: 100%;
+    min-height: 250px; /* Ensure height is forced */
+    align-items: stretch;
+}
+
+#chartBars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end; /* Keeps bars on the floor */
+    justify-content: space-around;
+    min-height: 200px;
+    padding-bottom: 10px;
+}
+
+/* Ensure bars have a minimum width so they don't vanish */
+.chart-bar-group {
+    min-width: 30px;
+    height: 100%;
+}
+
 /* ============================================
    ACTIVITY FEED
 ============================================ */

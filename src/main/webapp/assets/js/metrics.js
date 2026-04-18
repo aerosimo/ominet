@@ -29,98 +29,83 @@
  *                                                                            *
  ******************************************************************************/
 
-// Store data globally to switch views without re-fetching
+document.addEventListener('DOMContentLoaded', () => {
+    fetchMetrics();
+});
+
 let metricsData = null;
 
 async function fetchMetrics() {
     try {
-        const response = await fetch('/api/metric'); // Your Jersey Endpoint
-        const data = await response.json();
-        metricsData = data;
-        // Default to Disk on first load
+        const response = await fetch('/api/metric');
+        metricsData = await response.json();
+        console.log("Data Received:", metricsData); // Debug check
         updateChart('disk');
     } catch (error) {
-        console.error("Failed to fetch metrics:", error);
+        document.getElementById('chartBars').innerHTML = `<p style="color:red; font-size:12px;">Failed to load metrics</p>`;
     }
 }
 
 function updateChart(type) {
     const container = document.getElementById('chartBars');
     const yAxis = document.getElementById('yAxis');
-    if (!metricsData) return;
+    if (!metricsData || !metricsData[type]) return;
 
-    // Update Button UI
-    document.querySelectorAll('.card-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase().includes(type)) btn.classList.add('active');
-    });
+    // Toggle Button UI
+    document.querySelectorAll('.card-btn').forEach(btn => btn.classList.remove('active'));
+    event?.target?.classList.add('active');
 
-    let rawList = metricsData[type];
-
-    // Reverse the data if your API is returning DESC (Newest first)
-    // Charts usually read Left-to-Right (Oldest-to-Newest)
-    const displayList = [...rawList].reverse();
-
+    const displayList = [...metricsData[type]].reverse();
     container.innerHTML = '';
 
-    // Determine Max Value & Color Theme
-    let maxValue = 100;
+    // Helper to strip "GB" and return a float
+    const cleanNum = (val) => parseFloat(String(val).replace(/[^\d.-]/g, '')) || 0;
+
+    // Calculate Scale
+    let maxValue = 0;
     let theme = 'bar-emerald';
     let unit = 'GB';
 
     if (type === 'disk') {
-        maxValue = Math.max(...displayList.map(d => parseFloat(d.total)));
+        maxValue = Math.max(...displayList.map(d => cleanNum(d.total)));
         theme = 'bar-emerald';
     } else if (type === 'memory') {
-        maxValue = Math.max(...displayList.map(d => parseFloat(d.max)));
+        maxValue = Math.max(...displayList.map(d => cleanNum(d.max)));
         theme = 'bar-gold';
     } else {
-        // CPU Time is large, we'll scale it based on max found in set
-        maxValue = Math.max(...displayList.map(d => parseInt(d.cpuTime)));
+        maxValue = Math.max(...displayList.map(d => cleanNum(d.cpuTime)));
         theme = 'bar-sapphire';
-        unit = '';
+        unit = 'ns';
     }
 
-    // Update Y-Axis Labels
+    // Safety check for divide by zero
+    if (maxValue === 0) maxValue = 100;
+
+    // Update Y-Axis
     yAxis.innerHTML = `
-        <span class="y-value">${maxValue.toFixed(0)}${unit}</span>
-        <span class="y-value">${(maxValue * 0.75).toFixed(0)}${unit}</span>
-        <span class="y-value">${(maxValue * 0.5).toFixed(0)}${unit}</span>
-        <span class="y-value">${(maxValue * 0.25).toFixed(0)}${unit}</span>
+        <span class="y-value">${Math.round(maxValue)}${unit}</span>
+        <span class="y-value">${Math.round(maxValue * 0.5)}${unit}</span>
         <span class="y-value">0</span>
     `;
 
-    // Generate Bars
+    // Render Bars
     displayList.forEach(item => {
-        let value = 0;
-        let timeLabel = "";
+        let val = 0;
+        let dateStr = item.modifiedDate || "00:00:00";
+        let label = dateStr.includes(' ') ? dateStr.split(' ')[1].substring(0, 5) : dateStr.substring(0, 5);
 
-        // Map data fields based on type
-        if (type === 'disk') {
-            value = parseFloat(item.total) - parseFloat(item.free); // Show used space
-            timeLabel = item.modifiedDate ? item.modifiedDate.split(' ')[1].substring(0, 5) : "--:--";
-        } else if (type === 'memory') {
-            value = parseFloat(item.used);
-            timeLabel = item.modifiedDate ? item.modifiedDate.split(' ')[1].substring(0, 5) : "--:--";
-        } else {
-            value = parseInt(item.cpuTime);
-            timeLabel = item.modifiedDate ? item.modifiedDate.split(' ')[1].substring(0, 5) : "--:--";
-        }
+        if (type === 'disk') val = cleanNum(item.total) - cleanNum(item.free);
+        else if (type === 'memory') val = cleanNum(item.used);
+        else val = cleanNum(item.cpuTime);
 
-        const heightPercentage = (value / maxValue) * 100;
+        const pct = (val / maxValue) * 100;
 
-        const barGroup = document.createElement('div');
-        barGroup.className = 'chart-bar-group';
-        barGroup.innerHTML = `
-            <div class="chart-bar ${theme}" 
-                 style="height: ${Math.max(heightPercentage, 5)}%;" 
-                 title="${value.toFixed(2)}${unit} at ${timeLabel}">
-            </div>
-            <span class="chart-label">${timeLabel}</span>
+        const group = document.createElement('div');
+        group.className = 'chart-bar-group';
+        group.innerHTML = `
+            <div class="chart-bar ${theme}" style="height: ${Math.max(pct, 2)}%;"></div>
+            <span class="chart-label">${label}</span>
         `;
-        container.appendChild(barGroup);
+        container.appendChild(group);
     });
 }
-
-// Initialize on load
-fetchMetrics();

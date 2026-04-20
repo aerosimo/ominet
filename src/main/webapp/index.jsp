@@ -116,7 +116,7 @@
             <div class="user-profile">
                 <div class="user-avatar">O</div>
                 <div class="user-info">
-                    <div class="user-name">OmniProv</div>
+                    <div class="user-name">Omninet</div>
                     <div class="user-role">Dashboard</div>
                 </div>
             </div>
@@ -354,13 +354,13 @@
                 </div>
                 <div class="donut-container" style="min-height: 140px;">
                     <div class="zodiac-menu">
-                        <img id="zodiac-img" src="assets/img/zodiac/scorpio.jpg" alt="User zodiac" class="zodiac">
+                        <img id="zodiac-img" src="assets/img/zodiac/astrology.jpg" alt="User zodiac" class="zodiac">
                     </div>
 
                     <div class="zodiac-legend">
                         <div class="legend-item">
                             <span class="legend-color magenta"></span>
-                            <strong id="zodiac-name">Scorpio</strong>
+                            <strong id="zodiac-name">Astrologer</strong>
                         </div>
                         <div class="legend-item">
                             <span class="legend-color slate"></span>

@@ -385,6 +385,7 @@
 </div>
 
 <script src="assets/js/script.js"></script>
+<script src="assets/js/avatar.js"></script>
 <script src="assets/js/server.js"></script>
 <script src="assets/js/metrics.js"></script>
 <script src="assets/js/activity.js"></script>

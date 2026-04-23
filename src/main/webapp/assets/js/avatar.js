@@ -32,40 +32,54 @@
 async function fetchUserAvatar() {
     const uname = window.CURRENT_USER;
     const token = window.AUTH_TOKEN;
-    const defaultAvatar = "assets/img/user/user.webp";
     const avatarImg = document.getElementById('nav-user-avatar');
+    const defaultAvatar = "assets/img/user/user.webp";
 
-    if (!uname || !token) return;
+    if (!uname || !token) {
+        console.warn("Avatar: Missing credentials.");
+        return;
+    }
 
+    // Try both paths if one fails, or stick to the verified citizenone path
     const url = `/citizenone/api/profile/avatar/${uname}`;
 
     try {
+        console.log(`Fetching avatar for ${uname}...`);
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': token,
-                'Content-Type': 'application/json'
+                'Accept': 'application/json'
             }
         });
 
-        if (!response.ok) throw new Error("Avatar not found");
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
 
         const data = await response.json();
 
-        // Check if avatar field exists and has content
-        if (data.avatar && data.avatar.length > 100) {
+        if (data.avatar && data.avatar.startsWith('data:image')) {
+            console.log("Avatar loaded successfully.");
             avatarImg.src = data.avatar;
+        } else if (data.avatar) {
+            // If the API sends pure base64 without the "data:image..." prefix
+            console.log("Avatar missing prefix, adding it manually.");
+            avatarImg.src = `data:image/png;base64,${data.avatar}`;
         } else {
+            console.warn("Avatar field empty in JSON.");
             avatarImg.src = defaultAvatar;
         }
 
     } catch (error) {
-        console.warn("Avatar load failed, using default:", error);
+        console.error("Avatar API Error:", error);
         avatarImg.src = defaultAvatar;
     }
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
+// Ensure it runs
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fetchUserAvatar);
+} else {
     fetchUserAvatar();
-});
+}

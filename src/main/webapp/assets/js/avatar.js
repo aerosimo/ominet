@@ -41,7 +41,7 @@ async function fetchUserAvatar() {
     }
 
     // Try both paths if one fails, or stick to the verified citizenone path
-    const url = `/citizenone/api/profile/avatar/${uname}`;
+    const url = `https://ominet.aerosimo.com:9443/citizenone/api/profile/avatar/${uname}`;
 
     try {
         console.log(`Fetching avatar for ${uname}...`);

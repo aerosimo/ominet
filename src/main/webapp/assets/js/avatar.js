@@ -35,16 +35,12 @@ async function fetchUserAvatar() {
     const avatarImg = document.getElementById('nav-user-avatar');
     const defaultAvatar = "assets/img/user/user.webp";
 
-    if (!uname || !token) {
-        console.warn("Avatar: Missing credentials.");
-        return;
-    }
+    if (!uname || !token || !avatarImg) return;
 
-    // Try both paths if one fails, or stick to the verified citizenone path
-    const url = `https://ominet.aerosimo.com:9443/citizenone/api/profile/avatar/${uname}`;
+    // Use relative path to avoid CORS issues
+    const url = `/citizenone/api/profile/avatar/${uname}`;
 
     try {
-        console.log(`Fetching avatar for ${uname}...`);
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -53,21 +49,22 @@ async function fetchUserAvatar() {
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`Server returned ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const data = await response.json();
 
-        if (data.avatar && data.avatar.startsWith('data:image')) {
-            console.log("Avatar loaded successfully.");
-            avatarImg.src = data.avatar;
-        } else if (data.avatar) {
-            // If the API sends pure base64 without the "data:image..." prefix
-            console.log("Avatar missing prefix, adding it manually.");
-            avatarImg.src = `data:image/png;base64,${data.avatar}`;
+        // Handle potential Case Sensitivity (avatar vs Avatar)
+        const rawAvatar = data.avatar || data.Avatar;
+
+        if (rawAvatar) {
+            let avatarStr = rawAvatar.trim();
+            // Apply prefix if missing
+            avatarImg.src = avatarStr.startsWith('data:image')
+                ? avatarStr
+                : `data:image/png;base64,${avatarStr}`;
+
+            console.log("Avatar updated successfully.");
         } else {
-            console.warn("Avatar field empty in JSON.");
             avatarImg.src = defaultAvatar;
         }
 
@@ -77,9 +74,5 @@ async function fetchUserAvatar() {
     }
 }
 
-// Ensure it runs
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fetchUserAvatar);
-} else {
-    fetchUserAvatar();
-}
+// Ensure it runs once DOM is ready
+document.addEventListener('DOMContentLoaded', fetchUserAvatar);

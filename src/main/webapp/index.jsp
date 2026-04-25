@@ -116,7 +116,7 @@
             <div class="user-profile">
                 <div class="user-avatar">O</div>
                 <div class="user-info">
-                    <div class="user-name">Omninet</div>
+                    <div class="user-name">Ominet</div>
                     <div class="user-role">Dashboard</div>
                 </div>
             </div>

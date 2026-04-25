@@ -130,7 +130,7 @@
             <h1 class="page-title">Dashboard Overview</h1>
             <div class="navbar-right">
                 <div class="user-menu">
-                    <img id="nav-user-avatar" src="assets/img/user/user.webp" alt="User Avatar" class="avatar">
+                    <img src="assets/img/user/user.webp" alt="User Avatar" class="avatar">
                 </div>
             </div>
         </nav>
